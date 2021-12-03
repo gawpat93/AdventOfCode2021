@@ -44,13 +44,59 @@ namespace AdventOfCode2021
 
         public static int CalculatePart2(string inputFileName)
         {
-            var lines = File.ReadAllLines(inputFileName);
-            foreach (var line in lines)
+            var oxygenGeneratorRating = GetOxygenGeneratorRating(inputFileName);
+            var CO2ScrubberRating = GetCO2ScrubberRating(inputFileName);
+            return oxygenGeneratorRating * CO2ScrubberRating;
+        }
+
+        private static int GetOxygenGeneratorRating(string inputFileName)
+        {
+            var lines = File.ReadAllLines(inputFileName).ToList();
+            var length = lines[0].Length;
+            for (int i = 0; i < length; i++)
             {
-                //todo
+                var sum = 0;
+                foreach (var line in lines)
+                {
+                    sum += int.Parse(line[i].ToString());
+                }
+;
+                int mostCommonBit = (double)sum / (double)lines.Count >= 0.5 ? 1 : 0;
+
+                lines = lines.Where(line => int.Parse(line[i].ToString()) == mostCommonBit).ToList();
+
+                if (lines.Count == 1) break;
             }
 
-            return 0;
+            var result = string.Join("", lines.Single());
+            int gammaRate = Convert.ToInt32(result, 2);
+
+            return Convert.ToInt32(result, 2);
+        }
+
+        private static int GetCO2ScrubberRating(string inputFileName)
+        {
+            var lines = File.ReadAllLines(inputFileName).ToList();
+            var length = lines[0].Length;
+            for (int i = 0; i < length; i++)
+            {
+                var sum = 0;
+                foreach (var line in lines)
+                {
+                    sum += int.Parse(line[i].ToString());
+                }
+;
+                int lessCommonBit = (double)sum / (double)lines.Count >= 0.5 ? 0 :1;
+
+                lines = lines.Where(line => int.Parse(line[i].ToString()) == lessCommonBit).ToList();
+
+                if (lines.Count == 1) break;
+            }
+
+            var result = string.Join("", lines.Single());
+            int gammaRate = Convert.ToInt32(result, 2);
+
+            return Convert.ToInt32(result, 2);
         }
     }
 }
