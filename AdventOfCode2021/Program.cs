@@ -11,3 +11,9 @@ Console.WriteLine($"Day02.1: {resultDay02_1}"); //1815044
 
 var resultDay02_2 = Day02.CalculatePart2(@"Data\inputDay02.dat");
 Console.WriteLine($"Day02.2: {resultDay02_2}"); //1739283308
+
+var resultDay03_1 = Day03.CalculatePart1(@"Data\inputDay03.dat");
+Console.WriteLine($"Day03.1: {resultDay03_1}"); //845186
+
+var resultDay03_2 = Day03.CalculatePart2(@"Data\inputDay03.dat");
+Console.WriteLine($"Day03.2: {resultDay03_2}"); //todo
