@@ -22,4 +22,4 @@ var resultDay04_1 = Day04.CalculatePart1(@"Data\inputDay04.dat");
 Console.WriteLine($"Day04.1: {resultDay04_1}"); //8442
 
 var resultDay04_2 = Day04.CalculatePart2(@"Data\inputDay04.dat");
-Console.WriteLine($"Day04.2: {resultDay04_2}"); //todo
+Console.WriteLine($"Day04.2: {resultDay04_2}"); //4590

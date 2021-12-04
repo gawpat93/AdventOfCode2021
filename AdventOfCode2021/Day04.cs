@@ -42,6 +42,25 @@
                 return SelectedNumbers[numberOfTurns] * unselectedSum;
             }
 
+            public int GeResultPart2()
+            {
+                Board winnerBoard = Boards.First();
+                var numberOfTurns = Boards.First().GetFirstBingo(SelectedNumbers);
+                foreach (var board in Boards)
+                {
+                    var number = board.GetFirstBingo(SelectedNumbers);
+                    if (number > numberOfTurns)
+                    {
+                        numberOfTurns = number;
+                        winnerBoard = board;
+                    }
+                }
+
+                var unselectedSum = winnerBoard.GetUnselectedSum(SelectedNumbers.Take(numberOfTurns + 1));
+
+                return SelectedNumbers[numberOfTurns] * unselectedSum;
+            }
+
 
             private class Board
             {
@@ -125,8 +144,7 @@
 
         public static int CalculatePart2(string inputFileName)
         {
-            var lines = File.ReadAllLines(inputFileName);
-            return 0;
+            return new Bingo(inputFileName).GeResultPart2();
         }
     }
 }
