@@ -29,3 +29,9 @@ Console.WriteLine($"Day05.1: {resultDay05_1}"); //5835
 
 var resultDay05_2 = Day05.CalculatePart2(@"Data\inputDay05.dat");
 Console.WriteLine($"Day05.2: {resultDay05_2}"); //17013
+
+var resultDay06_1 = Day06.CalculatePart1(@"Data\inputDay06.dat");
+Console.WriteLine($"Day06.1: {resultDay06_1}"); //361169
+
+var resultDay06_2 = Day06.CalculatePart2(@"Data\inputDay06.dat");
+Console.WriteLine($"Day06.2: {resultDay06_2}"); //1634946868992
