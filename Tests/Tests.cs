@@ -73,8 +73,8 @@ namespace Tests
         {
             var result1 = Day08.CalculatePart1(@"Data\inputDay08.dat");
             Assert.AreEqual(239, result1);
-            //var result2 = Day08.CalculatePart2(@"Data\inputDay08.dat");
-            //Assert.AreEqual(0, result2);
+            var result2 = Day08.CalculatePart2(@"Data\inputDay08.dat");
+            Assert.AreEqual(946346, result2);
         }
     }
 }

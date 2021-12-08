@@ -46,4 +46,4 @@ var resultDay08_1 = Day08.CalculatePart1(@"Data\inputDay08.dat");
 Console.WriteLine($"Day08.1: {resultDay08_1}"); //239
 
 var resultDay08_2 = Day08.CalculatePart2(@"Data\inputDay08.dat");
-Console.WriteLine($"Day08.2: {resultDay08_2}"); //
+Console.WriteLine($"Day08.2: {resultDay08_2}"); //946346
