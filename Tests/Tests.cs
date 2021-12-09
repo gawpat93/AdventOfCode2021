@@ -80,10 +80,10 @@ namespace Tests
         [Test]
         public void TestDay09()
         {
-            //var result1 = Day09.CalculatePart1(@"Data\inputDay09.dat");
-            //Assert.AreEqual(0, result1);
-            //var result2 = Day09.CalculatePart2(@"Data\inputDay09.dat");
-            //Assert.AreEqual(0, result2);
+            var result1 = Day09.CalculatePart1(@"Data\inputDay09.dat");
+            Assert.AreEqual(417, result1);
+            var result2 = Day09.CalculatePart2(@"Data\inputDay09.dat");
+            Assert.AreEqual(0, result2);
         }
     }
 }
