@@ -92,7 +92,7 @@ namespace Tests
             var result1 = Day10.CalculatePart1(@"Data\inputDay10.dat");
             Assert.AreEqual(339537, result1);
             var result2 = Day10.CalculatePart2(@"Data\inputDay10.dat");
-            Assert.AreEqual(0, result2);
+            Assert.AreEqual(2412013412, result2);
         }
     }
 }

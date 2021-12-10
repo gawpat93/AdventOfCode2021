@@ -58,4 +58,4 @@ var resultDay10_1 = Day10.CalculatePart1(@"Data\inputDay10.dat");
 Console.WriteLine($"Day10.1: {resultDay10_1}"); //339537
 
 var resultDay10_2 = Day10.CalculatePart2(@"Data\inputDay10.dat");
-Console.WriteLine($"Day10.2: {resultDay10_2}"); //
+Console.WriteLine($"Day10.2: {resultDay10_2}"); //2412013412
