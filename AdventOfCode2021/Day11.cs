@@ -30,7 +30,7 @@
         private const int MaxX = 10;
         private const int MaxY = 10;
 
-        public static int CalculatePart1(string inputFileName)
+        public static long CalculatePart1(string inputFileName)
         {
             var lines = File.ReadAllLines(inputFileName);
             var steps = 100;
@@ -103,11 +103,42 @@
         public static long CalculatePart2(string inputFileName)
         {
             var lines = File.ReadAllLines(inputFileName);
-            var points = new int[MaxY, MaxX];
+            var octopuses = new Octopus[MaxY, MaxX];
+            for (var y = 0; y < MaxY; y++)
+            {
+                var line = lines[y].ToCharArray();
+                for (var x = 0; x < MaxX; x++)
+                {
+                    octopuses[y, x] = Octopus.Create(int.Parse(line[x].ToString()));
+                }
+            }
 
-            //todo
+            for (var step = 0; ; step++)
+            {
+                var currentStepflashes = 0;
+                for (var y = 0; y < MaxY; y++)
+                {
+                    for (var x = 0; x < MaxX; x++)
+                    {
+                        octopuses[y, x].IncreaseEnergy();
+                        Flashes(ref octopuses, x, y);
+                    }
+                }
 
-            return 0;
+                for (var y = 0; y < MaxY; y++)
+                {
+                    for (var x = 0; x < MaxX; x++)
+                    {
+                        if (octopuses[y, x].Energy > 9)
+                        {
+                            octopuses[y, x].ResetAfterFlash();
+                            currentStepflashes++;
+                        }
+                    }
+                }
+
+                if (currentStepflashes == MaxX * MaxY) return step + 1;
+            }
         }
     }
 }
