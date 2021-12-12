@@ -19,16 +19,14 @@
 
         public static long CalculatePart1(string inputFileName)
         {
-            var lines = File.ReadAllLines(inputFileName);
-            var connections = new List<Connection>();
-
-            foreach (var line in lines)
-            {
-                var elements = line.Split('-');
-                connections.Add(new Connection(elements[0], elements[1]));
-            }
-
+            var connections = GetConnections(inputFileName);
             return CountPaths(connections, START, new List<string>());
+        }
+
+        public static long CalculatePart2(string inputFileName)
+        {
+            var connections = GetConnections(inputFileName);
+            return 0;
         }
 
         private static int CountPaths(List<Connection> connections, string current, List<string> visited)
@@ -55,13 +53,18 @@
         connections.Where(c => c.From == from).Select(x => x.To)
             .Union(connections.Where(c => c.To == from).Select(x => x.From)).ToList();
 
-        public static long CalculatePart2(string inputFileName)
+        private static List<Connection> GetConnections(string inputFileName)
         {
             var lines = File.ReadAllLines(inputFileName);
+            var connections = new List<Connection>();
 
-            //todo
+            foreach (var line in lines)
+            {
+                var elements = line.Split('-');
+                connections.Add(new Connection(elements[0], elements[1]));
+            }
 
-            return 0;
+            return connections;
         }
     }
 }
