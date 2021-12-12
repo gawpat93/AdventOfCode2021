@@ -108,7 +108,7 @@ namespace Tests
         public void TestDay12()
         {
             var result1 = Day12.CalculatePart1(@"Data\inputDay12.dat");
-            Assert.AreEqual(0, result1);
+            Assert.AreEqual(4749, result1);
             var result2 = Day12.CalculatePart2(@"Data\inputDay12.dat");
             Assert.AreEqual(0, result2);
         }
