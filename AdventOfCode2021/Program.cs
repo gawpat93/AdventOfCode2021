@@ -60,8 +60,14 @@
 //var resultDay10_2 = Day10.CalculatePart2(@"Data\inputDay10.dat");
 //Console.WriteLine($"Day10.2: {resultDay10_2}"); //2412013412
 
-var resultDay11_1 = Day11.CalculatePart1(@"Data\inputDay11.dat");
-Console.WriteLine($"Day11.1: {resultDay11_1}"); //1588
+//var resultDay11_1 = Day11.CalculatePart1(@"Data\inputDay11.dat");
+//Console.WriteLine($"Day11.1: {resultDay11_1}"); //1588
 
-var resultDay11_2 = Day11.CalculatePart2(@"Data\inputDay11.dat");
-Console.WriteLine($"Day11.2: {resultDay11_2}"); //517
+//var resultDay11_2 = Day11.CalculatePart2(@"Data\inputDay11.dat");
+//Console.WriteLine($"Day11.2: {resultDay11_2}"); //517
+
+var resultDay12_1 = Day12.CalculatePart1(@"Data\inputDay12.dat");
+Console.WriteLine($"Day12.1: {resultDay12_1}"); //
+
+var resultDay12_2 = Day12.CalculatePart2(@"Data\inputDay12.dat");
+Console.WriteLine($"Day12.2: {resultDay12_2}"); //
