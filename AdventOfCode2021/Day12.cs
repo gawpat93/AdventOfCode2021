@@ -2,8 +2,11 @@
 {
     public static class Day12
     {
-        public const string START = "start";
-        public const string END = "end";
+        private const string START = "start";
+        private const string END = "end";
+
+        public static long CalculatePart1(string inputFileName) => CountPaths(GetConnections(inputFileName), START, new List<string>(), false);
+        public static long CalculatePart2(string inputFileName) => CountPaths(GetConnections(inputFileName), START, new List<string>(), false, true);
 
         private class Connection
         {
@@ -17,51 +20,41 @@
             }
         }
 
-        public static long CalculatePart1(string inputFileName)
-        {
-            var connections = GetConnections(inputFileName);
-            return CountPaths(connections, START, new List<string>());
-        }
-
-        public static long CalculatePart2(string inputFileName)
-        {
-            var connections = GetConnections(inputFileName);
-            return 0;
-        }
-
-        private static int CountPaths(List<Connection> connections, string current, List<string> visited)
+        private static int CountPaths(IEnumerable<Connection> connections, string current, IEnumerable<string> visitedCaves, bool smallCaveVisitedTwice, bool part2 = false)
         {
             if (current == END) return 1;
+            var newVisitedCaves = new List<string>(visitedCaves) { current };
             var count = 0;
             var allConnectionFromCurrentPath = GetAllConnections(connections, current);
-            foreach (var next in allConnectionFromCurrentPath)
+            foreach (var cave in allConnectionFromCurrentPath)
             {
-                var alreadyVisited = visited.Any(x => x == next);
-                var isBigCave = next.All(char.IsUpper);
+                var alreadyVisited = newVisitedCaves.Contains(cave);
+                var isBigCave = cave.Any(char.IsUpper);
                 if (isBigCave || !alreadyVisited)
                 {
-                    var newVisited = new List<string>(visited);
-                    newVisited.Add(current);
-                    count += CountPaths(connections, next, newVisited);
+                    count += CountPaths(connections, cave, newVisitedCaves, smallCaveVisitedTwice, part2);
+                }
+                else if (part2 && cave != START && !smallCaveVisitedTwice)
+                {
+                    count += CountPaths(connections, cave, newVisitedCaves, true, part2);
                 }
             }
 
             return count;
         }
 
-        private static List<string> GetAllConnections(List<Connection> connections, string from) =>
-        connections.Where(c => c.From == from).Select(x => x.To)
-            .Union(connections.Where(c => c.To == from).Select(x => x.From)).ToList();
+        private static IEnumerable<string> GetAllConnections(IEnumerable<Connection> connections, string from) =>
+            connections.Where(c => c.From == from).Select(x => x.To).Union(connections.Where(c => c.To == from).Select(x => x.From));
 
-        private static List<Connection> GetConnections(string inputFileName)
+        private static IEnumerable<Connection> GetConnections(string inputFileName)
         {
             var lines = File.ReadAllLines(inputFileName);
-            var connections = new List<Connection>();
+            var connections = new Connection[lines.Length];
 
-            foreach (var line in lines)
+            for (var i = 0; i < lines.Length; i++)
             {
-                var elements = line.Split('-');
-                connections.Add(new Connection(elements[0], elements[1]));
+                var elements = lines[i].Split('-');
+                connections[i] = new Connection(elements[0], elements[1]);
             }
 
             return connections;
