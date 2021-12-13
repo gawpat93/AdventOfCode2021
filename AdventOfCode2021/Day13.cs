@@ -25,45 +25,63 @@
             return (points, instructions);
         }
 
-        public static long CalculatePart1(string inputFileName)
+        public static long CalculatePart1(string inputFileName) => Solve(inputFileName, true, false);
+
+        public static long CalculatePart2(string inputFileName) => Solve(inputFileName, false, true);
+
+        public static int Solve(string inputFileName, bool onlyFirstInstruction, bool printMap)
         {
             var input = LoadPointsAndInstructions(inputFileName);
             var points = input.points;
             var instructions = input.instructions;
-
-            var inst = instructions.First();
-            for (int i = 0; i<points.Count; i++)
+            for (var t = 0; t<(onlyFirstInstruction ? 1 : instructions.Count); t++)
             {
-                var val = inst.Value;
-                var axis = inst.Axis;
-                if (axis is AxisX)
+                for (int i = 0; i<points.Count; i++)
                 {
-                    if (points[i].X > val)
+                    var val = instructions[t].Value;
+                    var axis = instructions[t].Axis;
+                    if (axis is AxisX)
                     {
-                        var newX = 2*val - points[i].X;
-                        points[i].SetX(newX);
+                        if (points[i].X > val)
+                        {
+                            var newX = 2*val - points[i].X;
+                            points[i].SetX(newX);
+                        }
+                    }
+                    else if (axis is AxisY)
+                    {
+                        if (points[i].Y > val)
+                        {
+                            var newY = 2*val - points[i].Y;
+                            points[i].SetY(newY);
+                        }
                     }
                 }
-                else if (axis is AxisY)
-                {
-                    if (points[i].Y > val)
-                    {
-                        var newY = 2*val - points[i].Y;
-                        points[i].SetY(newY);
-                    }
-                }
+                points = DistinctPoints(points);
             }
 
-            return DistinctPoints(points).Count;
-        }
+            if (printMap)
+            {
+                var maxX = points.Max(p => p.X)+1;
+                var maxY = points.Max(p => p.Y)+1;
+                var map = new bool[maxX, maxY];
+                foreach (var point in points)
+                {
+                    map[point.X, point.Y] = true;
+                }
 
-        public static long CalculatePart2(string inputFileName)
-        {
-            var lines = File.ReadAllLines(inputFileName);
+                for (int y = 0; y < maxY; y++)
+                {
+                    Console.Write("\n");
+                    for (int x = 0; x < maxX; x++)
+                    {
+                        Console.Write(map[x, y] ? "*" : " ");
+                    }
+                }
+                Console.Write("\n");
+            }
 
-            //todo
-
-            return 0;
+            return points.Count;
         }
 
         private static List<Point> DistinctPoints(List<Point> points)
