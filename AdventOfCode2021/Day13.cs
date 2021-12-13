@@ -2,29 +2,6 @@
 {
     public static class Day13
     {
-        private static (List<Point> points, List<Fold> instructions) LoadPointsAndInstructions(string inputFileName)
-        {
-            var lines = File.ReadAllLines(inputFileName);
-            var points = new List<Point>();
-            var instructions = new List<Fold>();
-            foreach (var line in lines)
-            {
-                if (line==string.Empty) continue;
-                if (line.StartsWith("fold along"))
-                {
-                    var values = line.Remove(0, 11).Trim().Split('=');
-                    instructions.Add(new Fold(values[0], int.Parse(values[1])));
-                }
-                else
-                {
-                    var values = line.Split(',').Select(int.Parse).ToArray();
-                    points.Add(new Point(values[0], values[1]));
-                }
-            }
-
-            return (points, instructions);
-        }
-
         public static long CalculatePart1(string inputFileName) => Solve(inputFileName, true, false);
 
         public static long CalculatePart2(string inputFileName) => Solve(inputFileName, false, true);
@@ -84,6 +61,29 @@
             return points.Count;
         }
 
+        private static (List<Point> points, List<Fold> instructions) LoadPointsAndInstructions(string inputFileName)
+        {
+            var lines = File.ReadAllLines(inputFileName);
+            var points = new List<Point>();
+            var instructions = new List<Fold>();
+            foreach (var line in lines)
+            {
+                if (line==string.Empty) continue;
+                if (line.StartsWith(foldAlong))
+                {
+                    var values = line.Remove(0, 11).Trim().Split('=');
+                    instructions.Add(new Fold(values[0], int.Parse(values[1])));
+                }
+                else
+                {
+                    var values = line.Split(',').Select(int.Parse).ToArray();
+                    points.Add(new Point(values[0], values[1]));
+                }
+            }
+
+            return (points, instructions);
+        }
+
         private static List<Point> DistinctPoints(List<Point> points)
         {
             var uniquePoints = new List<Point>();
@@ -99,6 +99,8 @@
 
         private const string AxisX = "x";
         private const string AxisY = "y";
+
+        private const string foldAlong = "fold along";
 
         private class Point
         {
