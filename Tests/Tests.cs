@@ -127,8 +127,8 @@ namespace Tests
         {
             var result1 = Day14.CalculatePart1(@"Data\inputDay14.dat");
             Assert.AreEqual(2740, result1);
-            //var result2 = Day14.CalculatePart2(@"Data\inputDay14.dat");
-            //Assert.AreEqual(0, result2);
+            var result2 = Day14.CalculatePart2(@"Data\inputDay14.dat");
+            Assert.AreEqual(2959788056211, result2);
         }
     }
 }
