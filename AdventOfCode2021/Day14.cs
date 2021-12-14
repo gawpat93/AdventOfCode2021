@@ -6,24 +6,24 @@
 
         public static long CalculatePart2(string inputFileName) => Solve(inputFileName, 40);
 
-        public class PairCollection
+        private class PairCollection
         {
             public Dictionary<string, long> Collection { get; private set; } = new();
 
             public void AddOrUpdate(string key, long value)
             {
-                if (Collection.TryGetValue(key, out var _)) Collection[key]+=value;
+                if (Collection.ContainsKey(key)) Collection[key]+=value;
                 else Collection.Add(key, value);
             }
         }
 
-        public class CharCollection
+        private class CharCollection
         {
-            public Dictionary<Char, long> Collection { get; private set; } = new();
+            public Dictionary<char, long> Collection { get; private set; } = new();
 
             public void AddOrUpdate(char key, long value)
             {
-                if (Collection.TryGetValue(key, out var _)) Collection[key]+=value;
+                if (Collection.ContainsKey(key)) Collection[key]+=value;
                 else Collection.Add(key, value);
             }
         }
