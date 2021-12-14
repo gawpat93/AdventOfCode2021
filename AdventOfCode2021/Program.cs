@@ -79,7 +79,7 @@
 //Console.WriteLine($"Day13.2: {resultDay13_2}"); //95 JPZCUAUR
 
 var resultDay14_1 = Day14.CalculatePart1(@"Data\inputDay14.dat");
-Console.WriteLine($"Day14.1: {resultDay14_1}"); //
+Console.WriteLine($"Day14.1: {resultDay14_1}"); //2740
 
 var resultDay14_2 = Day14.CalculatePart2(@"Data\inputDay14.dat");
 Console.WriteLine($"Day14.2: {resultDay14_2}"); //
