@@ -28,7 +28,7 @@
             }
         }
 
-        public static long Solve(string inputFileName, int numberOfSteps)
+        private static long Solve(string inputFileName, int numberOfSteps)
         {
             var lines = File.ReadAllLines(inputFileName);
             var polymerTemplate = lines[0];
@@ -46,7 +46,7 @@
                 pairs.AddOrUpdate(key, 1);
             }
 
-            for (int t = 0; t < numberOfSteps; t++)
+            for (var t = 0; t < numberOfSteps; t++)
             {
                 var nextPairs = new PairCollection();
                 foreach (var pair in pairs.Collection)
