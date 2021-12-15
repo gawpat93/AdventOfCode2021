@@ -30,9 +30,10 @@
                 var p = queue.Dequeue();
                 foreach (var n in p.GetNeighbours())
                 {
-                    if (riskLevelMap.ContainsKey(n) && !totalRiskMap.ContainsKey(n))
+                    if (!riskLevelMap.ContainsKey(n)) continue;
+                    var totalRisk = totalRiskMap[p] + riskLevelMap[n];
+                    if (!totalRiskMap.ContainsKey(n) || totalRiskMap[n] > totalRisk)
                     {
-                        var totalRisk = totalRiskMap[p] + riskLevelMap[n];
                         totalRiskMap[n] = totalRisk;
                         queue.Enqueue(n, totalRisk);
                     }
