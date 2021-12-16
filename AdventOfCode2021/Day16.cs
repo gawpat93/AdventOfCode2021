@@ -11,7 +11,7 @@ namespace AdventOfCode2021
             public int BitCount { get; set; }
             public string BinaryStringValue { get; set; }
             public bool IsValueTpe => Type == 4;
-            public int? DecimalValue => IsValueTpe ? Convert.ToInt32(BinaryStringValue, 2) : null;
+            public long? DecimalValue => IsValueTpe ? Convert.ToInt64(BinaryStringValue, 2) : null;
             public List<Packet> SubPackets { get; init; } = new();
             public void AddSubPacket(Packet packet) => SubPackets.Add(packet);
 
@@ -25,6 +25,55 @@ namespace AdventOfCode2021
                 }
 
                 return sum;
+            }
+
+            public long GetResult()
+            {
+                long result = 0;
+                if (Type == 4)
+                {
+                    result =  DecimalValue.GetValueOrDefault();
+                }
+                else if (Type == 0)
+                {
+                    result = SubPackets.Sum(x => x.GetResult());
+                }
+                else if (Type == 1)
+                {
+                    result=1;
+                    foreach (var sp in SubPackets)
+                    {
+                        result*=sp.GetResult();
+                    }
+                }
+                else if (Type == 2)
+                {
+                    result = SubPackets.Min(x => x.GetResult());
+                }
+                else if (Type == 3)
+                {
+                    result = SubPackets.Max(x => x.GetResult());
+                }
+                else if (Type == 5)
+                {
+                    var first = SubPackets.First().GetResult();
+                    var last = SubPackets.Last().GetResult();
+                    result = first > last ? 1 : 0;
+                }
+                else if (Type == 6)
+                {
+                    var first = SubPackets.First().GetResult();
+                    var last = SubPackets.Last().GetResult();
+                    result = first < last ? 1 : 0;
+                }
+                else if (Type == 7)
+                {
+                    var first = SubPackets.First().GetResult();
+                    var last = SubPackets.Last().GetResult();
+                    result = first == last ? 1 : 0;
+                }
+
+                return result;
             }
 
             public Packet(int version, int type)
@@ -134,9 +183,9 @@ namespace AdventOfCode2021
 
         public static long CalculatePart2(string inputFileName)
         {
-            //todo
-
-            return 0;
+            var hexString = File.ReadAllText(inputFileName);
+            var binaryString = HexStringToBinary(hexString);
+            return ReadPacket(binaryString).GetResult();
         }
     }
 }

@@ -94,4 +94,4 @@ var resultDay16_1 = Day16.CalculatePart1(@"Data\inputDay16.dat");
 Console.WriteLine($"Day16.1: {resultDay16_1}"); //883
 
 var resultDay16_2 = Day16.CalculatePart2(@"Data\inputDay16.dat");
-Console.WriteLine($"Day16.2: {resultDay16_2}"); //
+Console.WriteLine($"Day16.2: {resultDay16_2}"); //1675198555015
