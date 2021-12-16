@@ -11,7 +11,7 @@ namespace AdventOfCode2021
             public int BitCount { get; set; }
             public string BinaryStringValue { get; set; }
             public bool IsValueTpe => Type == 4;
-            public int DecimalValue => IsValueTpe ? Convert.ToInt32(BinaryStringValue, 2) : -1;
+            public int? DecimalValue => IsValueTpe ? Convert.ToInt32(BinaryStringValue, 2) : null;
             public List<Packet> SubPackets { get; init; } = new();
             public void AddSubPacket(Packet packet) => SubPackets.Add(packet);
 
@@ -128,11 +128,8 @@ namespace AdventOfCode2021
         public static long CalculatePart1(string inputFileName)
         {
             var hexString = File.ReadAllText(inputFileName);
-
             var binaryString = HexStringToBinary(hexString);
-            var packet = ReadPacket(binaryString);
-
-            return packet.GetAllVersionsSum();
+            return ReadPacket(binaryString).GetAllVersionsSum();
         }
 
         public static long CalculatePart2(string inputFileName)
