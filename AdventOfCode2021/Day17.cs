@@ -2,8 +2,36 @@
 {
     public static class Day17
     {
-        private record TargetArea(int MinX, int MaxX, int MinY, int MaxY);
-        private record Point(int X, int Y);
+        public static long CalculatePart1(string inputFileName)
+        {
+            var result = int.MinValue;
+            var targetArea = LoadTargetArea(inputFileName);
+            for (var vx = 0; vx <=targetArea.MaxX; vx++)
+            {
+                for (var vY = targetArea.MinY; vY <= -targetArea.MinY; vY++)
+                {
+                    var (maxY, targetReached) = CheckIfTargetReachedAndCalculateMaxY(vx, vY, targetArea);
+                    if (targetReached && result < maxY) result = maxY;
+                }
+            }
+
+            return result;
+        }
+
+        public static long CalculatePart2(string inputFileName)
+        {
+            var targetArea = LoadTargetArea(inputFileName);
+            var count = 0;
+            for (var vx = 0; vx <=targetArea.MaxX; vx++)
+            {
+                for (var vY = targetArea.MinY; vY <= -targetArea.MinY; vY++)
+                {
+                    if (CheckIfTargetReachedAndCalculateMaxY(vx, vY, targetArea).targetReached) count++;
+                }
+            }
+
+            return count;
+        }
 
         private static TargetArea LoadTargetArea(string inputFileName)
         {
@@ -14,7 +42,7 @@
             return new TargetArea(xRange[0], xRange[1], yRange[0], yRange[1]);
         }
 
-        private static (int maxY, bool targetReached) CalculateMaxY(int vX, int vY, TargetArea ta)
+        private static (int maxY, bool targetReached) CheckIfTargetReachedAndCalculateMaxY(int vX, int vY, TargetArea ta)
         {
             var maxY = 0;
             var x = 0;
@@ -41,31 +69,7 @@
             return (maxY, targetReached);
         }
 
-        public static long CalculatePart1(string inputFileName)
-        {
-            var result = int.MinValue;
-            var targetArea = LoadTargetArea(inputFileName);
-            var vxMin = 0;
-            var vxMax = targetArea.MaxX;
-            var vyMin = targetArea.MinY;
-            var vyMax = -targetArea.MinY;
-            for (var vx = vxMin; vx <=vxMax; vx++)
-            {
-                for (var vY = vyMin; vY <= vyMax; vY++)
-                {
-                    var (maxY, targetReached)= CalculateMaxY(vx, vY, targetArea);
-                    if (targetReached && result < maxY) result = maxY;
-                }
-            }
-
-            return result;
-        }
-
-        public static long CalculatePart2(string inputFileName)
-        {
-            var targetArea = LoadTargetArea(inputFileName);
-            //todo
-            return 0;
-        }
+        private record TargetArea(int MinX, int MaxX, int MinY, int MaxY);
+        private record Point(int X, int Y);
     }
 }
