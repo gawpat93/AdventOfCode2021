@@ -148,5 +148,14 @@ namespace Tests
             var result2 = Day16.CalculatePart2(@"Data\inputDay16.dat");
             Assert.AreEqual(1675198555015, result2);
         }
+
+        [Test]
+        public void TestDay17()
+        {
+            var result1 = Day17.CalculatePart1(@"Data\inputDay17.dat");
+            Assert.AreEqual(0, result1);
+            var result2 = Day17.CalculatePart2(@"Data\inputDay17.dat");
+            Assert.AreEqual(0, result2);
+        }
     }
 }
