@@ -153,7 +153,7 @@ namespace Tests
         public void TestDay17()
         {
             var result1 = Day17.CalculatePart1(@"Data\inputDay17.dat");
-            Assert.AreEqual(0, result1);
+            Assert.AreEqual(2850, result1);
             var result2 = Day17.CalculatePart2(@"Data\inputDay17.dat");
             Assert.AreEqual(0, result2);
         }
