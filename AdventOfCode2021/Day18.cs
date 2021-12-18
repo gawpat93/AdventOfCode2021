@@ -11,25 +11,30 @@
                 numbers.Add(CreatePair(line, null));
             }
 
-            var result = numbers.First();
-            for (var i = 0; i <= numbers.Count; i++)
+            return GetMagnitude(numbers.ToArray());
+        }
+
+        public static long CalculatePart2(string inputFileName)
+        {
+            var lines = File.ReadAllLines(inputFileName);
+            var numbers = new List<SnailFishNumberPair>();
+            foreach (var line in lines)
             {
-                do
-                {
-                    do
-                    {
-                        var exploded = result.Explode(0);
-                        if (!exploded) break;
-                    }
-                    while (true);
-                    var splitted = result.Split();
-                    if (!splitted) break;
-                }
-                while (true);
-                if (i>0 && i<numbers.Count) result = Add(result, numbers[i]);
+                numbers.Add(CreatePair(line, null));
             }
 
-            return result.GetMagnitude();
+            long max = 0;
+            for (var i = 0; i<lines.Length; i++)
+            {
+                for (var j = 0; j<lines.Length; j++)
+                {
+                    if (i==j) continue;
+                    var magnitude = GetMagnitude(new SnailFishNumberPair[] { CreatePair(lines[i], null), CreatePair(lines[j], null) });
+                    if (max<magnitude) max = magnitude;
+                }
+            }
+
+            return max;
         }
 
         private static SnailFishNumberPair CreatePair(string input, SnailFishNumberPair? parent)
@@ -72,13 +77,27 @@
             return pair;
         }
 
-        public static long CalculatePart2(string inputFileName)
+        private static long GetMagnitude(SnailFishNumberPair[] numbers)
         {
-            var lines = File.ReadAllLines(inputFileName);
+            var result = numbers.First();
+            for (var i = 0; i <= numbers.Length; i++)
+            {
+                do
+                {
+                    do
+                    {
+                        var exploded = result.Explode(0);
+                        if (!exploded) break;
+                    }
+                    while (true);
+                    var splitted = result.Split();
+                    if (!splitted) break;
+                }
+                while (true);
+                if (i>0 && i<numbers.Length) result = Add(result, numbers[i]);
+            }
 
-            //todo
-
-            return 0;
+            return result.GetMagnitude();
         }
 
         private static SnailFishNumberPair Add(SnailFishNumberPair first, SnailFishNumberPair second)
