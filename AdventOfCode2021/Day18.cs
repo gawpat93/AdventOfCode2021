@@ -12,22 +12,26 @@
             }
 
             var result = numbers.First();
-            do
-            {
-                if (result.GetMaxSubLevel()>=4) result.Explode(0);
-                if (!result.TrySplitting()) break;
-            }
-            while (true);
-
-            for (var i = 1; i < numbers.Count; i++)
+            for (var i = 0; i < numbers.Count; i++)
             {
                 do
                 {
-                    if (result.GetMaxSubLevel()>=4) result.Explode(0);
+                    do
+                    {
+                        if (result.GetMaxSubLevel()>=4)
+                        {
+                            if (!result.Explode(0)) break;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    while (true);
                     if (!result.TrySplitting()) break;
                 }
                 while (true);
-                result = Add(result, numbers[i]);
+                if (i>0) result = Add(result, numbers[i]);
             }
 
             return result.GetMagnitude();
@@ -51,23 +55,23 @@
                     if (openingCount==endingCount) break;
                 }
                 endFirstIndex++;
-                pair.SetFirstPair(CreatePair(input.Substring(0, endFirstIndex), pair));
+                pair.SetLeftPair(CreatePair(input.Substring(0, endFirstIndex), pair));
             }
             else
             {
                 endFirstIndex = 1;
-                pair.SetFirstNumber(int.Parse(input[0].ToString()));
+                pair.SetLeftNumber(int.Parse(input[0].ToString()));
             }
 
             input = input.Substring(endFirstIndex+1);
 
             if (input.StartsWith("["))
             {
-                pair.SetSecondPair(CreatePair(input, pair));
+                pair.SetRightPair(CreatePair(input, pair));
             }
             else
             {
-                pair.SetSecondNumber(int.Parse(input[0].ToString()));
+                pair.SetRightNumber(int.Parse(input[0].ToString()));
             }
 
             return pair;
@@ -87,17 +91,17 @@
             var result = new SnailFishNumberPair(null);
             first.SetParent(result);
             second.SetParent(result);
-            result.SetFirstPair(first);
-            result.SetSecondPair(second);
+            result.SetLeftPair(first);
+            result.SetRightPair(second);
             return result;
         }
 
         private class SnailFishNumberPair
         {
-            public int? FirstNumber { get; private set; }
-            public SnailFishNumberPair? FirstPair { get; private set; }
-            public int? SecondNumber { get; private set; }
-            public SnailFishNumberPair? SecondPair { get; private set; }
+            public int? LeftNumber { get; private set; }
+            public SnailFishNumberPair? LeftPair { get; private set; }
+            public int? RightNumber { get; private set; }
+            public SnailFishNumberPair? RightPair { get; private set; }
             public SnailFishNumberPair? Parent { get; private set; }
 
             public SnailFishNumberPair(SnailFishNumberPair? parent)
@@ -115,73 +119,108 @@
                 var exploded = false;
                 if (Parent is not null && level == 4)
                 {
-                    var first = FirstNumber.GetValueOrDefault();
-                    var second = SecondNumber.GetValueOrDefault();
-                    if (this == Parent.FirstPair)
+                    var first = LeftNumber.GetValueOrDefault();
+                    var second = RightNumber.GetValueOrDefault();
+                    if (this == Parent.LeftPair)
                     {
-                        AddFirstValueToParent(first);
-                        AddSecondValueToParent(second);
-                        Parent.FirstNumber = 0;
-                        Parent.FirstPair = null;
+                        AddToNextLeftUp(first);
+                        AddToNextRightUp(second);
+                        Parent.LeftNumber = 0;
+                        Parent.LeftPair = null;
                     }
-                    else if (this == Parent.SecondPair)
+                    else if (this == Parent.RightPair)
                     {
-                        AddFirstValueToParent(first);
-                        AddSecondValueToParent(second);
-                        Parent.SecondNumber = 0;
-                        Parent.SecondPair = null;
+                        AddToNextLeftUp(first);
+                        AddToNextRightUp(second);
+                        Parent.RightNumber = 0;
+                        Parent.RightPair = null;
                     }
 
                     exploded = true;
                 }
                 else
                 {
-                    if (FirstPair is not null && !exploded)
+                    if (LeftPair is not null && !exploded)
                     {
-                        exploded = FirstPair.Explode(level+1);
-                        //if (FirstPair.Explode(level+1))
-                        //{
-                        //    //FirstPair = null;
-                        //}
+                        exploded = LeftPair.Explode(level+1);
                     }
-                    if (SecondPair is not null && !exploded)
+                    if (RightPair is not null && !exploded)
                     {
-                        exploded = SecondPair.Explode(level+1);
-                        //if (SecondPair.Explode(level+1))
-                        //{
-                        //    //SecondPair = null;
-                        //}
+                        exploded = RightPair.Explode(level+1);
                     }
                 }
 
                 return exploded;
             }
 
-            private void AddFirstValueToParent(int value)
+            private void AddToNextLeftUp(int value)
             {
                 if (Parent is null) return;
-                if (Parent.FirstNumber is not null) Parent.SetFirstNumber(Parent.FirstNumber.Value + value);
-                else Parent.AddFirstValueToParent(value);
+                if (Parent.LeftPair is not null && Parent.LeftPair != this)
+                {
+                    Parent.LeftPair.AddToNextRightDown(value);
+                }
+                else if (Parent.LeftNumber is not null)
+                {
+                    Parent.LeftNumber+=value;
+                }
+                else
+                {
+                    Parent.AddToNextLeftUp(value);
+                }
             }
 
-            private void AddSecondValueToParent(int value)
+            private void AddToNextRightDown(int value)
+            {
+                if (RightPair is not null)
+                {
+                    RightPair.AddToNextRightDown(value);
+                }
+                else if (RightNumber is not null)
+                {
+                    RightNumber+=value;
+                }
+            }
+
+            private void AddToNextRightUp(int value)
             {
                 if (Parent is null) return;
-                if (Parent.SecondNumber is not null) Parent.SetSecondNumber(Parent.SecondNumber.Value + value);
-                else Parent.AddSecondValueToParent(value);
+                if (Parent.RightPair is not null && Parent.RightPair != this)
+                {
+                    Parent.RightPair.AddToNextLeftDown(value);
+                }
+                else if (Parent.RightNumber is not null)
+                {
+                    Parent.RightNumber+=value;
+                }
+                else
+                {
+                    Parent.AddToNextRightUp(value);
+                }
+            }
 
+            private void AddToNextLeftDown(int value)
+            {
+                if (LeftPair is not null)
+                {
+                    LeftPair.AddToNextLeftDown(value);
+                }
+                else if (LeftNumber is not null)
+                {
+                    LeftNumber+=value;
+                }
             }
 
             public bool TrySplitting()
             {
                 var splitted = SplitIfNeeded();
-                if (!splitted && FirstPair is not null)
+                if (!splitted && LeftPair is not null)
                 {
-                    splitted = FirstPair.TrySplitting();
+                    splitted = LeftPair.TrySplitting();
                 }
-                if (!splitted && SecondPair is not null)
+                if (!splitted && RightPair is not null)
                 {
-                    splitted = SecondPair.TrySplitting();
+                    splitted = RightPair.TrySplitting();
                 }
 
                 return splitted;
@@ -190,22 +229,22 @@
             private bool SplitIfNeeded()
             {
                 var splitted = false;
-                if (FirstNumber is not null && FirstNumber > 9)
+                if (LeftNumber is not null && LeftNumber > 9)
                 {
-                    var splitedValue = ((double)FirstNumber.Value/2);
-                    FirstPair = new SnailFishNumberPair(this);
-                    FirstPair.FirstNumber = Convert.ToInt32(Math.Ceiling(splitedValue));
-                    FirstPair.SecondNumber = Convert.ToInt32(Math.Floor(splitedValue));
-                    FirstNumber = null;
+                    var splitedValue = ((double)LeftNumber.Value/2);
+                    LeftPair = new SnailFishNumberPair(this);
+                    LeftPair.LeftNumber = Convert.ToInt32(Math.Ceiling(splitedValue));
+                    LeftPair.RightNumber = Convert.ToInt32(Math.Floor(splitedValue));
+                    LeftNumber = null;
                     splitted = true;
                 }
-                else if (SecondNumber is not null && SecondNumber > 9)
+                else if (RightNumber is not null && RightNumber > 9)
                 {
-                    var splitedValue = ((double)SecondNumber.Value/2);
-                    SecondPair = new SnailFishNumberPair(this);
-                    SecondPair.FirstNumber = Convert.ToInt32(Math.Ceiling(splitedValue));
-                    SecondPair.SecondNumber = Convert.ToInt32(Math.Floor(splitedValue));
-                    SecondNumber = null;
+                    var splitedValue = ((double)RightNumber.Value/2);
+                    RightPair = new SnailFishNumberPair(this);
+                    RightPair.LeftNumber = Convert.ToInt32(Math.Ceiling(splitedValue));
+                    RightPair.RightNumber = Convert.ToInt32(Math.Floor(splitedValue));
+                    RightNumber = null;
                     splitted = true;
                 }
 
@@ -215,15 +254,15 @@
             public int GetMaxSubLevel()
             {
                 var maxSubLevel = 0;
-                if (FirstPair is not null)
+                if (LeftPair is not null)
                 {
-                    var pairMaxSubLevel = FirstPair.GetMaxSubLevel()+1;
+                    var pairMaxSubLevel = LeftPair.GetMaxSubLevel()+1;
                     if (pairMaxSubLevel > maxSubLevel) maxSubLevel = pairMaxSubLevel;
                 }
 
-                if (SecondPair is not null)
+                if (RightPair is not null)
                 {
-                    var pairMaxSubLevel = SecondPair.GetMaxSubLevel()+1;
+                    var pairMaxSubLevel = RightPair.GetMaxSubLevel()+1;
                     if (pairMaxSubLevel > maxSubLevel) maxSubLevel = pairMaxSubLevel;
                 }
 
@@ -232,33 +271,33 @@
 
             public long GetMagnitude()
             {
-                long firstValue = FirstPair is not null ? FirstPair.GetMagnitude() : FirstNumber.GetValueOrDefault();
-                long secondValue = SecondPair is not null ? SecondPair.GetMagnitude() : SecondNumber.GetValueOrDefault();
+                long firstValue = LeftPair is not null ? LeftPair.GetMagnitude() : LeftNumber.GetValueOrDefault();
+                long secondValue = RightPair is not null ? RightPair.GetMagnitude() : RightNumber.GetValueOrDefault();
                 return 3*firstValue+2*secondValue;
             }
 
-            public void SetFirstPair(SnailFishNumberPair pair)
+            public void SetLeftPair(SnailFishNumberPair pair)
             {
-                FirstPair = pair;
-                FirstNumber = null;
+                LeftPair = pair;
+                LeftNumber = null;
             }
 
-            public void SetFirstNumber(int number)
+            public void SetLeftNumber(int number)
             {
-                FirstPair = null;
-                FirstNumber = number;
+                LeftPair = null;
+                LeftNumber = number;
             }
 
-            public void SetSecondPair(SnailFishNumberPair pair)
+            public void SetRightPair(SnailFishNumberPair pair)
             {
-                SecondPair = pair;
-                SecondNumber = null;
+                RightPair = pair;
+                RightNumber = null;
             }
 
-            public void SetSecondNumber(int number)
+            public void SetRightNumber(int number)
             {
-                SecondPair = null;
-                SecondNumber = number;
+                RightPair = null;
+                RightNumber = number;
             }
         }
     }
