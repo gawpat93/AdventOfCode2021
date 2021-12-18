@@ -103,7 +103,7 @@
 //Console.WriteLine($"Day17.2: {resultDay17_2}"); //1117
 
 var resultDay18_1 = Day18.CalculatePart1(@"Data\inputDay18.dat");
-Console.WriteLine($"Day18.1: {resultDay18_1}"); //
+Console.WriteLine($"Day18.1: {resultDay18_1}"); //4289
 
 var resultDay18_2 = Day18.CalculatePart2(@"Data\inputDay18.dat");
 Console.WriteLine($"Day18.2: {resultDay18_2}"); //

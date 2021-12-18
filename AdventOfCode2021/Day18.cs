@@ -20,18 +20,10 @@
                     {
                         var exploded = result.Explode(0);
                         if (!exploded) break;
-                        else
-                        {
-
-                        }
                     }
                     while (true);
                     var splitted = result.Split();
                     if (!splitted) break;
-                    else
-                    {
-
-                    }
                 }
                 while (true);
                 if (i>0 && i<numbers.Count) result = Add(result, numbers[i]);
@@ -221,7 +213,7 @@
                 {
                     splitted = LeftPair.Split();
                 }
-                
+
                 if (!splitted && LeftNumber is not null && LeftNumber.Value >= 10)
                 {
                     LeftPair = new SnailFishNumberPair(this)
@@ -233,12 +225,12 @@
                     LeftNumber = null;
                     splitted = true;
                 }
-                
+
                 if (!splitted && RightPair is not null)
                 {
                     splitted = RightPair.Split();
                 }
-                
+
                 if (!splitted && RightNumber is not null && RightNumber >= 10)
                 {
                     RightPair = new SnailFishNumberPair(this)
@@ -253,56 +245,6 @@
 
                 return splitted;
             }
-
-            //public bool TrySplitting()
-            //{
-            //    var splitted = false;
-            //    if (!splitted && LeftPair is not null)
-            //    {
-            //        splitted = LeftPair.TrySplitting();
-            //    }
-
-            //    if (!splitted && RightPair is not null)
-            //    {
-            //        splitted = RightPair.TrySplitting();
-            //    }
-
-            //    if (!splitted)
-            //    {
-            //        splitted = SplitIfNeeded();
-            //    }
-
-            //    return splitted;
-            //}
-
-            //private bool SplitIfNeeded()
-            //{
-            //    var splitted = false;
-            //    if (LeftNumber is not null && LeftNumber >= 10)
-            //    {
-            //        var splitedValue = ((double)LeftNumber.Value/2);
-            //        LeftPair = new SnailFishNumberPair(this)
-            //        {
-            //            LeftNumber = Convert.ToInt32(Math.Floor(splitedValue)),
-            //            RightNumber = Convert.ToInt32(Math.Ceiling(splitedValue))
-            //        };
-            //        LeftNumber = null;
-            //        splitted = true;
-            //    }
-            //    else if (RightNumber is not null && RightNumber >= 10)
-            //    {
-            //        var splitedValue = ((double)RightNumber.Value/2);
-            //        RightPair = new SnailFishNumberPair(this)
-            //        {
-            //            LeftNumber = Convert.ToInt32(Math.Floor(splitedValue)),
-            //            RightNumber = Convert.ToInt32(Math.Ceiling(splitedValue))
-            //        };
-            //        RightNumber = null;
-            //        splitted = true;
-            //    }
-
-            //    return splitted;
-            //}
 
             public long GetMagnitude()
             {
