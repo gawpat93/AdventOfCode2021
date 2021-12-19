@@ -2,11 +2,36 @@
 {
     public static class Day19
     {
-        public static long CalculatePart1(string inputFileName)
+        public static long CalculatePart1(string inputFileName) => GetNumberOfBeacons(inputFileName);
+        public static long CalculatePart2(string inputFileName)
+        {
+            var (_, scanners)=Process(inputFileName);
+            var maxDistance = 0;
+            for (int i = 0; i < scanners.Count; i++)
+            {
+                for (int j = 0; j < scanners.Count; j++)
+                {
+                    if (i==j) continue;
+                    var md = scanners[i].ManhattanDistanceTo(scanners[j]);
+                    if (md>maxDistance) maxDistance = md;
+                }
+            }
+
+            return maxDistance;
+        }
+
+        private static int GetNumberOfBeacons(string inputFileName)
+        {
+            var (numberOfBeacons, _)=Process(inputFileName);
+            return numberOfBeacons;
+        }
+        private static (int numberOfBeacons, List<Vector> scanners) Process(string inputFileName)
         {
             var scanners = LoadScannerData(inputFileName);
             var toProcess = new Queue<Scanner>(scanners.Skip(1));
             var allRelative = scanners[0].Points.ToHashSet();
+            var scannerPositions = new List<Vector> { new Vector(0, 0, 0) };
+
             while (toProcess.TryDequeue(out var current))
             {
                 bool processed = false;
@@ -14,26 +39,18 @@
                 {
                     var transformed = current.Points.Select(p => p.Transform(t)).ToArray();
                     var offset = transformed.SelectMany(i => allRelative.Select(j => i.Subtract(j)))
-                        .GroupBy(g=>g).Select(i => (Key: i.Key, Count: i.Count())).MaxBy(i => i.Count);
+                        .GroupBy(g => g).Select(i => (Key: i.Key, Count: i.Count())).MaxBy(i => i.Count);
                     if (offset.Count < 12) continue;
                     var added = transformed.Count(i => allRelative.Add(i.Subtract(offset.Key)));
                     processed = true;
+                    scannerPositions.Add(offset.Key);
                     break;
                 }
 
                 if (!processed) toProcess.Enqueue(current);
             }
 
-            return allRelative.Count();
-        }
-
-        public static long CalculatePart2(string inputFileName)
-        {
-            var scanners = LoadScannerData(inputFileName);
-
-            //todo
-
-            return 0;
+            return (allRelative.Count, scannerPositions);
         }
 
         private static List<Scanner> LoadScannerData(string inputFileName)
@@ -65,7 +82,7 @@
         {
             public Vector Subtract(Vector v) => new(X-v.X, Y-v.Y, Z-v.Z);
             public Vector Add(Vector v) => new(X+v.X, Y+v.Y, Z+v.Z);
-
+            public int ManhattanDistanceTo(Vector v) => Math.Abs(X - v.X) + Math.Abs(Y - v.Y) + Math.Abs(Z - v.Z);
             public Vector Transform(int id) => id switch
             {
                 0 => new(X, Y, Z),
