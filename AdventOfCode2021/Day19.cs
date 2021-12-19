@@ -7,9 +7,9 @@
         {
             var (_, scanners)=Process(inputFileName);
             var maxDistance = 0;
-            for (int i = 0; i < scanners.Count; i++)
+            for (int i = 0; i < scanners.Length; i++)
             {
-                for (int j = 0; j < scanners.Count; j++)
+                for (int j = 0; j < scanners.Length; j++)
                 {
                     if (i==j) continue;
                     var md = scanners[i].ManhattanDistanceTo(scanners[j]);
@@ -25,12 +25,12 @@
             var (numberOfBeacons, _)=Process(inputFileName);
             return numberOfBeacons;
         }
-        private static (int numberOfBeacons, List<Vector> scanners) Process(string inputFileName)
+        private static (int numberOfBeacons, Vector[] scanners) Process(string inputFileName)
         {
             var scanners = LoadScannerData(inputFileName);
             var toProcess = new Queue<Scanner>(scanners.Skip(1));
             var allRelative = scanners[0].Points.ToHashSet();
-            var scannerPositions = new List<Vector> { new Vector(0, 0, 0) };
+            var scannerPositions = new HashSet<Vector> { new Vector(0, 0, 0) };
 
             while (toProcess.TryDequeue(out var current))
             {
@@ -41,7 +41,7 @@
                     var offset = transformed.SelectMany(i => allRelative.Select(j => i.Subtract(j)))
                         .GroupBy(g => g).Select(i => (Key: i.Key, Count: i.Count())).MaxBy(i => i.Count);
                     if (offset.Count < 12) continue;
-                    var added = transformed.Count(i => allRelative.Add(i.Subtract(offset.Key)));
+                    transformed.Count(i => allRelative.Add(i.Subtract(offset.Key)));
                     processed = true;
                     scannerPositions.Add(offset.Key);
                     break;
@@ -50,14 +50,13 @@
                 if (!processed) toProcess.Enqueue(current);
             }
 
-            return (allRelative.Count, scannerPositions);
+            return (allRelative.Count, scannerPositions.ToArray());
         }
 
         private static List<Scanner> LoadScannerData(string inputFileName)
         {
             var result = new List<Scanner>();
             var lines = File.ReadAllLines(inputFileName);
-            var i = 0;
             foreach (var line in lines)
             {
                 if (line.StartsWith("--- scanner")) result.Add(new Scanner());
@@ -81,7 +80,6 @@
         private record Vector(int X, int Y, int Z)
         {
             public Vector Subtract(Vector v) => new(X-v.X, Y-v.Y, Z-v.Z);
-            public Vector Add(Vector v) => new(X+v.X, Y+v.Y, Z+v.Z);
             public int ManhattanDistanceTo(Vector v) => Math.Abs(X - v.X) + Math.Abs(Y - v.Y) + Math.Abs(Z - v.Z);
             public Vector Transform(int id) => id switch
             {
@@ -114,7 +112,7 @@
                 21 => new(-Y, Z, -X),
                 22 => new(Z, Y, -X),
                 23 => new(Y, -Z, -X),
-                _ => throw new ArgumentException()
+                _ => throw new ArgumentException("Wrong transformation id!")
             };
         }
     }
